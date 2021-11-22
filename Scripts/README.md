@@ -7,8 +7,8 @@
 
 MNIST
 ---------------------
-- For MNIST Experiments run: ```python train_MNIST.py```
-- To get saliency maps run: ```python plotSaliencyMaps_MNIST.py```
+- For MNIST Experiments run: ```python train_MNIST.py --trainingType interpretable --featuresDroped 0.5 --RandomMasking```
+- To get saliency maps run: ```python plotSaliencyMaps_MNIST.py --trainingType interpretable --featuresDroped 0.5 --RandomMasking```
 - To get denstiy maps run: ```python plotSaliencyMapsCompare_MNIST.py```
 - To get accuracy drop plots run: ```python maskedAcc_MNIST.py``` than ```python plotCompareMaskedAcc.py```
 
