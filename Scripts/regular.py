@@ -38,9 +38,7 @@ def train(args,epoch,model,trainloader,optimizer,criterion,Name=None):
 
     for batch_idx, (data, target) in enumerate(trainloader):
         data, target = data.to(device), target.to(device)
-        if(args.isCIFAR):
-            if args.half:
-                data = data.half()
+
         optimizer.zero_grad()
         output = model(data)
         loss = criterion(output, target)
@@ -51,24 +49,10 @@ def train(args,epoch,model,trainloader,optimizer,criterion,Name=None):
         predicted = output.argmax(dim=1, keepdim=True) 
         total += target.size(0)
         correct += predicted.eq(target.view_as(predicted)).sum().item()
-        if(args.TrainWithAugmented):
-            optimizer.zero_grad()
-            augmentedData=Helper.getAugmnetedBatch(data,args.maskType,maskPercentage=args.maskPercentage,mu=args.mu,maskPercentageRandom=args.maskPercentageRandom)
-            augmentedOutput = model(augmentedData)
-            lossAugmented = criterion(augmentedOutput, target)
-            lossAugmented.backward()
-            optimizer.step()
-            augmentedPrediction= augmentedOutput.argmax(dim=1, keepdim=True) 
-            correctAugmented += augmentedPrediction.eq(target.view_as(augmentedPrediction)).sum().item()
-            augmentedAcc=100.*correctAugmented/total
-            
-        if(args.TrainWithAugmented):
-            progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)| Aug: loss %.3f Acc %.3f'
-                     % (train_loss/(batch_idx+1), 100.*correct/total, correct, total,lossAugmented.item() ,augmentedAcc))
-
-        else:
-            progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                     % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+                    
+ 
+        progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
+                 % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
 
 
@@ -86,9 +70,7 @@ def test(args,epoch,model,testloader,criterion,best_acc,best_epoch,returnMaskedA
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(testloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            if(args.isCIFAR):
-                if args.half:
-                    inputs = inputs.half()
+
 
             outputs = model(inputs)
             loss = criterion(outputs, targets)
@@ -101,23 +83,10 @@ def test(args,epoch,model,testloader,criterion,best_acc,best_epoch,returnMaskedA
 
 
 
-            if(args.TrainWithAugmented):
-                augmentedData=Helper.getAugmnetedBatch(inputs,args.maskType,maskPercentage=args.maskPercentage,mu=args.mu,maskPercentageRandom=args.maskPercentageRandom)
-                augmentedOutput = model(augmentedData)
-                lossAugmented = criterion(augmentedOutput, targets)
-                augmentedPrediction= augmentedOutput.argmax(dim=1, keepdim=True) 
-                correctAugmented += augmentedPrediction.eq(targets.view_as(augmentedPrediction)).sum().item()
-                augmentedAcc=100.*correctAugmented/total
-
-
             if(printing):
-                if(args.TrainWithAugmented):
-                    progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f | best: Acc %.3f epoch %d | Aug: loss %.3f  Acc %.3f'
-                         % (test_loss/(batch_idx+1), 100.*correct/total,best_acc,best_epoch,lossAugmented.item() ,augmentedAcc))
-
-                else: 
-                    progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d) best Acc %.3f best epoch %d'
-                                 % (test_loss/(batch_idx+1), 100.*correct/total, correct, total,best_acc,best_epoch))
+            
+                progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d) best Acc %.3f best epoch %d'
+                             % (test_loss/(batch_idx+1), 100.*correct/total, correct, total,best_acc,best_epoch))
 
 
     acc = 100.*correct/total

@@ -168,9 +168,7 @@ def test(args,epoch,model,testloader,criterion,criterionKDL,best_acc,best_epoch,
         for batch_idx, (data, target) in enumerate(testloader):
             data, target = data.to(device), target.to(device)
             data.requires_grad = True
-            if(args.isCIFAR):
-                if args.half:
-                    data = data.half()  
+
 
             if(args.featuresDroped!=0):
                 numberOfFeatures = int(args.featuresDroped*data.shape[1]*data.shape[2]*data.shape[3])
