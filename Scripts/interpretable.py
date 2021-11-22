@@ -60,9 +60,6 @@ def train(args,epoch,model,trainloader,optimizer,criterion,criterionKDL,Name=Non
     for batch_idx, (data, target) in enumerate(trainloader):
         data, target = data.to(device), target.to(device)
         data.requires_grad = True
-        if(args.isCIFAR):
-            if args.half:
-                data = data.half()
         if(args.featuresDroped!=0):
             model.eval()
             numberOfFeatures = int(args.featuresDroped*data.shape[1]*data.shape[2]*data.shape[3])
@@ -72,23 +69,27 @@ def train(args,epoch,model,trainloader,optimizer,criterion,criterionKDL,Name=Non
             grads= saliency.attribute(data, target, abs=False).mean(1).detach().cpu().to(dtype=torch.float)
             if(args.abs):
                 grads=grads.abs()
+            if(args.isMNIST):
             
-            
-            tempData=tempData.view(tempData.shape[0], -1).detach()
-            tempGrads= grads.view(grads.shape[0], -1)
-            values,indx = torch.topk(tempGrads, numberOfFeatures, dim=1,largest=False)
+                tempData=tempData.view(tempData.shape[0], -1).detach()
+                tempGrads= grads.view(grads.shape[0], -1)
+                values,indx = torch.topk(tempGrads, numberOfFeatures, dim=1,largest=False)
 
-            for idx in range(tempData.shape[0]):
-            
-                if(args.RandomMasking):
-                    min_=torch.min(tempData[idx]).item()
-                    max_=torch.max(tempData[idx]).item()
+                for idx in range(tempData.shape[0]):
+                
+                    if(args.RandomMasking):
+                        min_=torch.min(tempData[idx]).item()
+                        max_=torch.max(tempData[idx]).item()
 
-                    randomMask = np.random.uniform(low=min_, high=max_, size=(len(indx[idx]),))
-                    tempData[idx][indx[idx]]= torch.Tensor(randomMask).to(device)
-                else:
-                    tempData[idx][indx[idx]]= data[0,0,0,0]
-      
+                        randomMask = np.random.uniform(low=min_, high=max_, size=(len(indx[idx]),))
+                        tempData[idx][indx[idx]]= torch.Tensor(randomMask).to(device)
+                    else:
+                        tempData[idx][indx[idx]]= data[0,0,0,0]
+            else:
+                for idx in range(tempData.shape[0]):
+                    singleMask=  Helper.get_SingleMask(args.featuresDroped,grads[idx], remove_important=False)
+                    tempData[idx] = Helper.fill_SingleMask(tempData[idx],singleMask,maskType)
+
 
             maskedInputs=tempData.view(data.shape).detach()
             model.train()
@@ -129,18 +130,7 @@ def train(args,epoch,model,trainloader,optimizer,criterion,criterionKDL,Name=Non
         correct += predicted.eq(target.view_as(predicted)).sum().item()
 
 
-        if(args.TrainWithAugmented):
-            optimizer.zero_grad()
-            augmentedData=Helper.getAugmnetedBatch(data,args.maskType,maskPercentage=args.maskPercentage,mu=args.mu,maskPercentageRandom=args.maskPercentageRandom)
 
-            augmentedOutput = model(augmentedData)
-            lossAugmented = criterion(augmentedOutput, target)
-            lossAugmented.backward()
-            optimizer.step()
-            augmentedPrediction= augmentedOutput.argmax(dim=1, keepdim=True) 
-            correctAugmented += augmentedPrediction.eq(target.view_as(augmentedPrediction)).sum().item()
-            augmentedAcc=100.*correctAugmented/total
-            
 
         if args.featuresDroped!=0 :
             if(args.TrainWithAugmented):
@@ -252,15 +242,6 @@ def test(args,epoch,model,testloader,criterion,criterionKDL,best_acc,best_epoch,
             total += target.size(0)
             correct += predicted.eq(target.view_as(predicted)).sum().item()
 
-
-
-            if(args.TrainWithAugmented):
-                augmentedData=Helper.getAugmnetedBatch(data,args.maskType,maskPercentage=args.maskPercentage,mu=args.mu,maskPercentageRandom=args.maskPercentageRandom)
-                augmentedOutput = model(augmentedData)
-                lossAugmented = criterion(augmentedOutput, target)
-                augmentedPrediction= augmentedOutput.argmax(dim=1, keepdim=True) 
-                correctAugmented += augmentedPrediction.eq(target.view_as(augmentedPrediction)).sum().item()
-                augmentedAcc=100.*correctAugmented/total
 
 
 
