@@ -124,17 +124,13 @@ def main():
 
         if(args.trainingType=="regular"):
             model= regular.train(args,epoch,model,trainloader,optimizer,criterion,saveFile)
-            if(args.TrainWithAugmented):
-                acc ,  prec1 = regular.test(args,epoch,model,testloader,criterion,best_prec1,best_epoch,returnMaskedAcc=True)
-            else:
-                prec1 =regular.test(args,epoch,model,testloader,criterion,best_prec1,best_epoch)
+
+            prec1 =regular.test(args,epoch,model,testloader,criterion,best_prec1,best_epoch)
 
         elif(args.trainingType=="interpretable"):
             model , train_Model_loss , train_Kl_loss = interpretable.train(args,epoch,model,trainloader,optimizer,criterion,criterionKDL,Name=saveFile)
-            if(args.TrainWithAugmented):
-                acc, prec1 ,test_Kl_loss  = interpretable.test(args,epoch,model,testloader,criterion,criterionKDL,best_prec1,best_epoch,returnMaskedAcc=True)
-            else:
-                prec1 ,test_Kl_loss  = interpretable.test(args,epoch,model,testloader,criterion,criterionKDL,best_prec1,best_epoch)
+
+            prec1 ,test_Kl_loss  = interpretable.test(args,epoch,model,testloader,criterion,criterionKDL,best_prec1,best_epoch)
 
         end_epoch_time=time.time()
         print("epoch time:",end_epoch_time-start_epoch_time,"No Change Flag",NoChange)
