@@ -133,13 +133,9 @@ def train(args,epoch,model,trainloader,optimizer,criterion,criterionKDL,Name=Non
 
 
         if args.featuresDroped!=0 :
-            if(args.TrainWithAugmented):
-                progress_bar(batch_idx, len(trainloader), '# %.1f Loss: %.3f |  Modelloss %.3f  KLloss %.3f | Acc: %.3f | Aug: loss %.3f Acc %.3f'
-                     % (args.featuresDroped,train_loss/(batch_idx+1),Model_loss/(batch_idx+1), Kl_loss /(batch_idx+1), 100.*correct/total,lossAugmented.item() ,augmentedAcc))
-
-            else:
-                progress_bar(batch_idx, len(trainloader), '# %.1f Loss: %.3f |  Modelloss %.3f  KLloss %.3f | Acc: %.3f'
-                     % (args.featuresDroped,train_loss/(batch_idx+1),Model_loss/(batch_idx+1), Kl_loss /(batch_idx+1), 100.*correct/total))
+        
+            progress_bar(batch_idx, len(trainloader), '# %.1f Loss: %.3f |  Modelloss %.3f  KLloss %.3f | Acc: %.3f'
+                 % (args.featuresDroped,train_loss/(batch_idx+1),Model_loss/(batch_idx+1), Kl_loss /(batch_idx+1), 100.*correct/total))
         else:
             progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total ))
