@@ -39,6 +39,7 @@ parser.add_argument('--abs', default=False, action="store_true",help='take abs v
 parser.add_argument('--save-dir', dest='save_dir',help='The directory used to save the trained models',default='models', type=str)
 parser.add_argument('--isMNIST', default=True, action="store_true",help='Dataset is MNIST')
 parser.add_argument('--append', default='1', type=str)
+parser.add_argument('--patience', default='20', type=str)
 
 # torch.manual_seed(args.seed)
 
@@ -160,7 +161,7 @@ def main():
         end_epoch_time=time.time()
 
 
-        if(NoChange>=20):
+        if(NoChange>=args.patience):
             best_epoch=epoch
             save_checkpoint({
                 'state_dict': model.state_dict(),
