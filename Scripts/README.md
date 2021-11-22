@@ -5,14 +5,18 @@
 
 
 
-MNIST
----------------------
-- For MNIST Experiments run: 
-```python train_MNIST.py --trainingType interpretable --featuresDroped 0.5 --RandomMasking```
-- To get saliency maps run: 
-```python plotSaliencyMaps_MNIST.py --trainingType interpretable --featuresDroped 0.5 --RandomMasking```
+MNIST Regular Training
+-----------------------
+- For MNIST Experiments run regular training:  ```python train_MNIST.py ```
+- To get saliency maps run : ```python plotSaliencyMaps_MNIST.py```
 - To get denstiy maps run: ```python plotSaliencyMapsCompare_MNIST.py```
 - To get accuracy drop plots run: ```python maskedAcc_MNIST.py``` than ```python plotCompareMaskedAcc.py```
+
+MNIST Interpretable Training
+-----------------------------
+- For interpretable training add the following flag to the above commands, here 50% of the features are masked during training.
+   
+   ```--trainingType interpretable --featuresDroped 0.5 --RandomMasking ```
 
 
 
