@@ -3,7 +3,7 @@ Code implementing "Improving Deep Learning Interpretability by Saliency Guided T
 
 
 
-![alt text](Neurips_2021_poster.001.png)
+![alt text](results.png)
 
 ## Abstaract
 
