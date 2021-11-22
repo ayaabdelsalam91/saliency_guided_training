@@ -72,27 +72,23 @@ def train(args,epoch,model,trainloader,optimizer,criterion,criterionKDL,Name=Non
             grads= saliency.attribute(data, target, abs=False).mean(1).detach().cpu().to(dtype=torch.float)
             if(args.abs):
                 grads=grads.abs()
-            if(args.isMNIST):
             
-                tempData=tempData.view(tempData.shape[0], -1).detach()
-                tempGrads= grads.view(grads.shape[0], -1)
-                values,indx = torch.topk(tempGrads, numberOfFeatures, dim=1,largest=False)
+            
+            tempData=tempData.view(tempData.shape[0], -1).detach()
+            tempGrads= grads.view(grads.shape[0], -1)
+            values,indx = torch.topk(tempGrads, numberOfFeatures, dim=1,largest=False)
 
-                for idx in range(tempData.shape[0]):
-                
-                    if(args.RandomMasking):
-                        min_=torch.min(tempData[idx]).item()
-                        max_=torch.max(tempData[idx]).item()
+            for idx in range(tempData.shape[0]):
+            
+                if(args.RandomMasking):
+                    min_=torch.min(tempData[idx]).item()
+                    max_=torch.max(tempData[idx]).item()
 
-                        randomMask = np.random.uniform(low=min_, high=max_, size=(len(indx[idx]),))
-                        tempData[idx][indx[idx]]= torch.Tensor(randomMask).to(device)
-                    else:
-                        tempData[idx][indx[idx]]= data[0,0,0,0]
-            else:
-                for idx in range(tempData.shape[0]):
-                    singleMask=  Helper.get_SingleMask(args.featuresDroped,grads[idx], remove_important=False)
-                    tempData[idx] = Helper.fill_SingleMask(tempData[idx],singleMask,maskType)
-
+                    randomMask = np.random.uniform(low=min_, high=max_, size=(len(indx[idx]),))
+                    tempData[idx][indx[idx]]= torch.Tensor(randomMask).to(device)
+                else:
+                    tempData[idx][indx[idx]]= data[0,0,0,0]
+      
 
             maskedInputs=tempData.view(data.shape).detach()
             model.train()
