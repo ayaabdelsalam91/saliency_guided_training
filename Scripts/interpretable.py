@@ -240,13 +240,8 @@ def test(args,epoch,model,testloader,criterion,criterionKDL,best_acc,best_epoch,
 
 
             if(args.featuresDroped!=0):
-                if(args.TrainWithAugmented):
-                    progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f | best: Acc %.3f epoch %d |  Aug:  loss %.3f Acc %.3f'
-                         % (test_loss/(batch_idx+1), 100.*correct/total,best_acc,best_epoch,lossAugmented.item() ,augmentedAcc))
-
-                else:
-                    progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f | best: Acc %.3f epoch %d'
-                         % (test_loss/(batch_idx+1), 100.*correct/total,best_acc,best_epoch))
+                progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f | best: Acc %.3f epoch %d'
+                     % (test_loss/(batch_idx+1), 100.*correct/total,best_acc,best_epoch))
             else:
                 progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f  | best: Acc %.3f epoch %d '
                          % (test_loss/(batch_idx+1), 100.*correct/total,best_acc,best_epoch))
