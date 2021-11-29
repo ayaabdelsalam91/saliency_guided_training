@@ -133,7 +133,6 @@ def main():
     for s, saliencyMethod in enumerate(saliencyMethods):
             
         for dindx , d in enumerate(drop):
-            print(d)
             model.load_state_dict(checkpoint['state_dict'])
             model.eval()
             acc =regular.testForRoar(args,model,testloader,criterion,d/100.0,saliencyMethod)
