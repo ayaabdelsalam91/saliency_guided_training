@@ -29,9 +29,9 @@ Scripts
 - For MNIST Experiments run regular training:  ```python train_MNIST.py ```
 - To get accuracy drop run: ```python maskedAcc_MNIST.py``` 
  ### For MNIST Interpretable Training
-- For interpretable training add the following flag to the above commands, here 50% of the features are masked during training.
+- For interpretable training add the following flag to the above commands, here 50% of the features are masked during training. <br />
    ```python train_MNIST.py  --trainingType interpretable --featuresDroped 0.5 --RandomMasking ```
-- To get accuracy drop plots run: 
+- To get accuracy drop plots run: <br />
 	```python maskedAcc_MNIST.py --trainingType interpretable --featuresDroped 0.5 --RandomMasking ```
 
 
