@@ -110,7 +110,7 @@ def testForRoar(args,model,testloader,criterion,percentage,saliencyMethod):
             inputs, targets = inputs.to(device), targets.to(device)
 
             if(percentage>0):
-                maskedData = Helper.getSalinecyAugmnetedBatch(model,inputs,targets,args.maskAccType,percentage,saliencyMethod,args.mu)
+                maskedData = Helper.getSalinecyAugmnetedBatch(model,inputs,targets,args.maskAccType,percentage,saliencyMethod)
             else:
                 maskedData=inputs
 
