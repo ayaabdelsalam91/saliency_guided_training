@@ -35,7 +35,6 @@ parser.add_argument('--lr', type=float, default=1.0, metavar='LR',help='learning
 parser.add_argument('--trainingType', default='regular', type=str)
 parser.add_argument('--featuresDroped', type=float, default=0.1)
 parser.add_argument('--RandomMasking', default=False, action="store_true", help='Random Masking while interpretable training')
-parser.add_argument('--TrainWithAugmented', default=False, action="store_true",help='Use augmentation while training')
 parser.add_argument('--abs', default=False, action="store_true",help='take abs value of saliency while interpretable training')
 parser.add_argument('--save-dir', dest='save_dir',help='The directory used to save the trained models',default='models', type=str)
 parser.add_argument('--isMNIST', default=True, action="store_true",help='Dataset is MNIST')

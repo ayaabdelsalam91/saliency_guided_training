@@ -108,10 +108,6 @@ def testForRoar(args,model,testloader,criterion,percentage,saliencyMethod):
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(testloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            if(args.isCIFAR):
-                if args.half:
-                    inputs = inputs.half()
-
 
             if(percentage>0):
                 maskedData = Helper.getSalinecyAugmnetedBatch(model,inputs,targets,args.maskAccType,percentage,saliencyMethod,args.mu)
