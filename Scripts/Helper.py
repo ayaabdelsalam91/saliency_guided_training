@@ -122,22 +122,6 @@ def fill_SingleMask(input_image,mask,maskType="meanMask",customMask=None):
 
 
 
-def getAugmnetedBatch(images,maskType,maskPercentage=0.1,mu=10,maskPercentageRandom=False):
-
-    tempData=images.clone()
-    if(maskPercentageRandom):
-        if(tempData.shape[1]==3):
-            maskPercentage = random.uniform(0.1, 0.25)
-        else:
-            maskPercentage = random.uniform(0, 1)
-    for _ in range(tempData.shape[0]):
-        mask =get_RandomMask(maskPercentage,images.shape[2])
-        tempData[_]= fill_SingleMask(tempData[_],mask,maskType=maskType,customMask=mu)
-    return tempData
-
-
-
-
 @torch.no_grad()
 def getSalinecyAugmnetedBatch(model,images,target,maskType,percentage,method,mu=10):
 

@@ -31,7 +31,7 @@ parser.add_argument('--batch-size', type=int, default=512, metavar='N', help='in
 parser.add_argument('--test-batch-size', type=int, default=20, metavar='N',help='input batch size for testing (default: 1000)')
 parser.add_argument('--lr', type=float, default=1.0, metavar='LR',help='learning rate (default: 1.0)')
 
-
+parser.add_argument('--maskAccType', default='trueMask', type=str)
 parser.add_argument('--trainingType', default='regular', type=str)
 parser.add_argument('--featuresDroped', type=float, default=0.1)
 parser.add_argument('--RandomMasking', default=False, action="store_true", help='Random Masking while interpretable training')
